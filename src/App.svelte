@@ -28,6 +28,8 @@
   function onSelect({ categoryId, sectionId }) {
     const path = sectionId ? `/${categoryId}/${sectionId}` : `/${categoryId}`
     history.pushState({}, '', path)
+    activeCategoryId = categoryId
+    activeSectionId = sectionId
     drawerOpen = false
   }
 </script>
