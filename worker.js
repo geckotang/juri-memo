@@ -1,14 +1,9 @@
 export default {
   async fetch(request, env) {
-    const url = new URL(request.url)
-
-    // アセットファイル（拡張子あり）はそのまま返す
-    if (url.pathname.includes('.')) {
-      return env.ASSETS.fetch(request)
+    const response = await env.ASSETS.fetch(request)
+    if (response.status === 404) {
+      return env.ASSETS.fetch(new Request(new URL('/index.html', request.url).toString()))
     }
-
-    // SPAルート → index.html にフォールバック
-    const indexUrl = new URL('/index.html', url.origin)
-    return env.ASSETS.fetch(new Request(indexUrl, request))
+    return response
   }
 }
