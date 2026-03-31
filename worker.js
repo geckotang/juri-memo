@@ -1,9 +1,13 @@
 export default {
   async fetch(request, env) {
-    const response = await env.ASSETS.fetch(request)
-    if (response.status === 404) {
-      return env.ASSETS.fetch(new Request(new URL('/index.html', request.url).toString()))
+    const url = new URL(request.url)
+
+    // 拡張子ありはアセットをそのまま返す
+    if (url.pathname.includes('.')) {
+      return env.ASSETS.fetch(request)
     }
-    return response
+
+    // SPAルートはすべて index.html を返す
+    return env.ASSETS.fetch(new Request(new URL('/index.html', url.origin).toString()))
   }
 }
